@@ -1,0 +1,66 @@
+.content {
+    margin-left:30px;
+}
+
+#amountGroup {
+    padding-top: 15px;
+}
+
+#OKBtn {
+    margin-left: 10px;
+}
+
+#selectCountry {
+    text-align: center;
+    width:180px;
+}
+
+#selectCountryDiv {
+    padding-top: 15px;
+}
+
+.dropdown-menu.multi-column {
+    width: 530px;
+    border: 1px solid black;
+}
+ 
+.dropdown-menu.multi-column .dropdown-menu {
+    display: block !important;
+    position: static !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+
+.dropdown-menu.multi-column .dropdown-menu li:hover {background-color: #ddd;}
+
+.dropdown-menu.multi-column .dropdown-menu li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#addButtons  {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+#maintable {
+    background-color: #F6F6F6;
+    width: 600px;
+}
+
+#maintable td{
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+}
+
+#maintable  tr:hover {
+    background-color: #D0D0D0;
+}   
