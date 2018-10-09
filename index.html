@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/converter.css">
+        <!-- Bootsrap and JQuery-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="content">
+        <div id="amountGroup">
+    		<label>Amount &nbsp&nbsp</label><input type="number" id="amountInput" value="100" min="0" max="1000000"/>
+            <button id="OKBtn" class="btn btn-dark" onclick="OKClick($('#amountInput').val())">OK</button>
+        </div>
+        
+        <div id = "selectCountryDiv">  
+            <button type="button" class="btn btn-light" id = "selectCountry" data-toggle="dropdown">Select Country</button>
+            <div class="dropdown-menu multi-column">
+              <div class="span6">
+                <ul class="dropdown-menu">
+                  <li><a onclick="countryClick('AUD')"><img height="25" width="25" src='css/flags/AUD.svg'>AUD</a></li>
+                  <li><a onclick="countryClick('CAD')"><img height="25" width="25" src='css/flags/CAD.svg'>CAD</a></li>
+                  <li><a onclick="countryClick('CHF')"><img height="25" width="25" src='css/flags/CHF.svg'>CHF</a></li>
+                  <li><a onclick="countryClick('HUF')"><img height="25" width="25" src='css/flags/HUF.svg'>HUF</a></li>
+                  <li><a onclick="countryClick('ILS')"><img height="25" width="25" src='css/flags/ILS.svg'>ILS</a></li>
+                  <li><a onclick="countryClick('ISK')"><img height="25" width="25" src='css/flags/ISK.svg'>ISK</a></li>
+                  <li><a onclick="countryClick('MXN')"><img height="25" width="25" src='css/flags/MXN.svg'>MXN</a></li>
+                  <li><a onclick="countryClick('NZD')"><img height="25" width="25" src='css/flags/NZD.svg'>NZD</a></li>
+                  <li><a onclick="countryClick('RON')"><img height="25" width="25" src='css/flags/RON.svg'>RON</a></li>
+                  <li><a onclick="countryClick('SGD')"><img height="25" width="25" src='css/flags/SGD.svg'>SGD</a></li>
+                  <li><a onclick="countryClick('USD')"><img height="25" width="25" src='css/flags/USD.svg'>USD</a></li>
+                </ul>
+              </div>
+              <div class="span6">
+                <ul class="dropdown-menu">
+                  <li><a onclick="countryClick('BGN')"><img height="25" width="25" src='css/flags/BGN.svg'>BGN</a></li>
+                  <li><a onclick="countryClick('CNY')"><img height="25" width="25" src='css/flags/CNY.svg'>CNY</a></li>
+                  <li><a onclick="countryClick('DKK')"><img height="25" width="25" src='css/flags/DKK.svg'>DKK</a></li>
+                  <li><a onclick="countryClick('HKD')"><img height="25" width="25" src='css/flags/HKD.svg'>HKD</a></li>
+                  <li><a onclick="countryClick('INR')"><img height="25" width="25" src='css/flags/INR.svg'>INR</a></li>
+                  <li><a onclick="countryClick('JPY')"><img height="25" width="25" src='css/flags/JPY.svg'>JPY</a></li>
+                  <li><a onclick="countryClick('MYR')"><img height="25" width="25" src='css/flags/MYR.svg'>MYR</a></li>
+                  <li><a onclick="countryClick('PHP')"><img height="25" width="25" src='css/flags/PHP.svg'>PHP</a></li>
+                  <li><a onclick="countryClick('RUB')"><img height="25" width="25" src='css/flags/RUB.svg'>RUB</a></li>
+                  <li><a onclick="countryClick('THB')"><img height="25" width="25" src='css/flags/THB.svg'>THB</a></li>
+                  <li><a onclick="countryClick('ZAR')"><img height="25" width="25" src='css/flags/ZAR.svg'>ZAR</a></li>
+                </ul>
+              </div>
+              <div class="span6">
+                <ul class="dropdown-menu">
+                  <li><a onclick="countryClick('BRL')"><img height="25" width="25" src='css/flags/BRL.svg'>BRL</a></li>
+                  <li><a onclick="countryClick('CZK')"><img height="25" width="25" src='css/flags/CZK.svg'>CZK</a></li>
+                  <li><a onclick="countryClick('GBP')"><img height="25" width="25" src='css/flags/GBP.svg'>GBP</a></li>
+                  <li><a onclick="countryClick('HRK')"><img height="25" width="25" src='css/flags/HRK.svg'>HRK</a></li>
+                  <li><a onclick="countryClick('IDR')"><img height="25" width="25" src='css/flags/IDR.svg'>IDR</a></li>
+                  <li><a onclick="countryClick('KRW')"><img height="25" width="25" src='css/flags/KRW.svg'>KRW</a></li>
+                  <li><a onclick="countryClick('NOK')"><img height="25" width="25" src='css/flags/NOK.svg'>NOK</a></li>
+                  <li><a onclick="countryClick('PLN')"><img height="25" width="25" src='css/flags/PLN.svg'>PLN</a></li>
+                  <li><a onclick="countryClick('SEK')"><img height="25" width="25" src='css/flags/SEK.svg'>SEK</a></li>
+                  <li><a onclick="countryClick('TRY')"><img height="25" width="25" src='css/flags/TRY.svg'>TRY</a></li>
+                </ul>
+              </div>
+            </div> 
+        </div>
+
+        <div id="addButtons">
+            <button id="addRowBtn" class="btn btn-dark" onclick="addRow($('#selectCountry').text())">Add to Row</button>
+            <button id="addColbtn" class="btn btn-dark" onclick="addCol($('#selectCountry').text())">Add to Column</button>
+            <button id="addColbtn" class="btn btn-dark" onclick="addRowCol($('#selectCountry').text())">Add to Both</button>
+        </div>
+
+        <table id="maintable" border="2">
+            <tbody id="maintablebody" >
+            <tr>
+                <td></td> <td><img height="25" width="25" src='css/flags/USD.svg'>USD</td> <td><img height="25" width="25" src='css/flags/HKD.svg'>HKD</td>
+            </tr>
+            <tr>
+                <td><img height="25" width="25" src='css/flags/USD.svg'>USD</td> <td>4</td> <td>4</td>
+            </tr>
+            <tr>
+                <td><img height="25" width="25" src='css/flags/HKD.svg'>HKD</td> <td>4</td> <td>4</td>
+            </tr>
+            </tbody>
+            
+        </table>
+
+       </div>
+    </body>
+    <script type="text/javascript" src="js/converter.js"></script>
+</html>
 
