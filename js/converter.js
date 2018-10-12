@@ -336,7 +336,7 @@ function deleteCol(input) {
 		  .then((response) => response.json())
 		  .then((responseJson) => {
 		  	json = responseJson;
-		  	if(json["rates"].length>10) {
+		  	if( JSON.stringify(json["rates"]).length>5) {
 		  		chartAfterJson();	
 		  	}
 		    
@@ -528,7 +528,7 @@ function deleteCol(input) {
      		document.getElementById('showCountry1').textContent = " 1" + country1 + " = ";
      		document.getElementById('showCountry2').textContent = country2;
      		console.log('chartOK clicked');
-     		drawChartOKclicked(country1,country2,year, month);	
+     		drawChartOKclicked(country1, country2, year, month);	
      	}
      }
    
