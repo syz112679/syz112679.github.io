@@ -48,8 +48,8 @@
     padding-bottom: 15px;
 }
 #maintable {
-    background-color: #F6F6F6;
-    width: 600px;
+    background-color: #ffffe0;
+    table-layout: fixed;
 }
 
 #maintable td{
@@ -59,8 +59,35 @@
     padding-left: 5px;
     padding-right: 5px;
     border: none;
+    white-space:nowrap;
 }
 
-#maintable  tr:hover {
-    background-color: #D0D0D0;
+#maintable  td:hover {
+    background-color: #eab49e;
 }   
+.hoverButton {
+    display: none;
+}
+
+td:hover .hoverButton {
+    display: inline-block;
+}
+#buttonChange {
+    background: url("icon/change.svg");
+    height: 40px;
+    width: 40px;
+}
+
+#selectMonth, #selectYear{
+     width: 100px;
+}
+.selectCountryDiv {
+    display: inline-block;
+}
+.selectCountryDiv {
+    display: inline-block;
+}
+
+#showDataDiv p{
+     display: inline;
+}
