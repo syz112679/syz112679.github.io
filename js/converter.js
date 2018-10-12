@@ -100,7 +100,7 @@ function addRow(input) {
 		    	rowRates[baseCurrency] = jsonData;
 		    	localStorage[baseCurrency] = JSON.stringify(jsonData);
 		    	// row head line:
-		    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + rows + ')">x</button></td>';
+		    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + "'" + input + "'" + ')">x</button></td>';
 				for (var k = 0; k < cols; k++) {
 					temp += '<td>' + (jsonData.rates[colCurrencies[k]] * amount).toFixed(2).toString() + '</td>';
 				}
@@ -111,7 +111,7 @@ function addRow(input) {
 		    .catch(error => console.error(error));
 		} else {
 			var baseCurrency = input;
-			var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + rows + ')">x</button></td>';
+			var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + "'" + input + "'" + ')">x</button></td>';
 			for (var k = 0; k < cols; k++) {
 				if(rowRates[baseCurrency] == undefined){
     				rowRates[baseCurrency] = JSON.parse(localStorage[baseCurrency]);	
@@ -136,7 +136,7 @@ function addCol(input) {
 		colToIndex[input] = cols;
 		var tableChildren = tableHTML.children;
 		// col head line:
-    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + cols + ')">x</button></td>'; // head line
+    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + "'" + input + "'" + ')">x</button></td>'; // head line
 		for (var k = 0; k < rows; k++) {
 			if(rowRates[rowCurrencies[k]] == undefined){
     				rowRates[rowCurrencies[k]] = JSON.parse(localStorage[rowCurrencies[k]]);	
@@ -170,7 +170,7 @@ function addRowCol(input) {
 		    	rowRates[baseCurrency] = jsonData;
 		    	localStorage[baseCurrency] = JSON.stringify(jsonData);
 		    	// row head line
-		    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + rows + ')">x</button></td>';
+		    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + "'" + input + "'" + ')">x</button></td>';
 				for (var k = 0; k < cols; k++) {
 					temp += '<td>' + (jsonData.rates[colCurrencies[k]] * amount).toFixed(2).toString() + '</td>';
 				}
@@ -183,7 +183,7 @@ function addRowCol(input) {
 
 				var tableChildren = tableHTML.children;
 				//col head line
-		    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + cols + ')">x</button></td>'; // head line
+		    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + "'" + input + "'" + ')">x</button></td>'; // head line
 				for (var k = 0; k < rows; k++) {
 					if(rowRates[rowCurrencies[k]] == undefined) {
 						rowRates[rowCurrencies[k]] = JSON.parse(localStorage[rowCurrencies[k]]);
@@ -196,7 +196,7 @@ function addRowCol(input) {
 		} else {
 			var baseCurrency = input;
 			// row head line
-	    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + rows + ')">x</button></td>';
+	    	var temp = '<tr><td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input + '<button class="close hoverButton" onclick="deleteRow(' + "'" + input + "'" + ')">x</button></td>';
 			for (var k = 0; k < cols; k++) {
 				if(rowRates[baseCurrency] == undefined) {
 						rowRates[baseCurrency] = JSON.parse(localStorage[baseCurrency]);
@@ -212,8 +212,11 @@ function addRowCol(input) {
 
 			var tableChildren = tableHTML.children;
 			// col head line
-	    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + cols + ')">x</button></td>'; // head line
+	    	tableChildren[0].innerHTML += '<td><img height="25" width="25" src="css/flags/' + input + '.svg">' + input +'<button class="close hoverButton" onclick="deleteCol(' + "'" + input + "'" + ')">x</button></td>'; // head line
 			for (var k = 0; k < rows; k++) {
+				if(rowRates[rowCurrencies[k]] == undefined) {
+						rowRates[rowCurrencies[k]] = JSON.parse(localStorage[rowCurrencies[k]]);
+					}
 				tableChildren[k+1].innerHTML += '<td>' + (rowRates[rowCurrencies[k]].rates[input] * amount).toFixed(2).toString() +'</td>';
 			}
 		}
@@ -265,22 +268,40 @@ function interChangeCountry() {
 }
 
 //
-function deleteRow(index) {
+function deleteRow(input) {
+	// input = 'CNY';
 	var children = tableHTML.children;
-	tableHTML.removeChild(children[index]);
-	delete rowToIndex[rowCurrencies[index]];
-	rowCurrencies.splice(index,1);
+	tableHTML.removeChild(children[rowToIndex[input]]);
+	var deleteRowNum = rowToIndex[input];
+	rowCurrencies.splice(rowToIndex[input]-1,1);
+	delete rowToIndex[input];
+
+	for (var i = 0; i < rows-1; i++) {
+		if(rowToIndex[rowCurrencies[i]] > deleteRowNum){
+			rowToIndex[rowCurrencies[i]] -= 1;
+		}
+	}
+	
+	
 	rows -= 1;
 
 }
 
-function deleteCol(index) {
+function deleteCol(input) {
 	var children = tableHTML.children;
 	for(var i = 0; i <= rows; i++) {
-		children[i].removeChild(children[i].children[index]);
+		children[i].removeChild(children[i].children[colToIndex[input]]);
 	}
-	delete colToIndex[colCurrencies[index]];
-	colCurrencies.splice(index,1);
+	var deleteColNum = colToIndex[input];
+	colCurrencies.splice(colToIndex[input]-1,1);
+	delete colToIndex[input];
+	
+	for (var i = 0; i < cols-1; i++) {
+		if(colToIndex[colCurrencies[i]] > deleteColNum){
+			colToIndex[colCurrencies[i]] -= 1;
+		}
+	}
+	
 	cols -= 1;
 }
 //************************************ Chart ***************************************
@@ -315,173 +336,178 @@ function deleteCol(index) {
 		  .then((response) => response.json())
 		  .then((responseJson) => {
 		  	json = responseJson;
-		    chartAfterJson();
-		  });
-	function chartAfterJson() {
-		drawChart();
+		  	if(json["rates"].length>10) {
+		  		chartAfterJson();	
+		  	}
+		    
+		  })
+		  .catch(error => console.error(error));
 
-		function drawChart() {
-			for(var a=1; a <= 9; a++) {
-				if(json["rates"][month+"0"+a.toString()]== undefined){
-					data[a] = undefined;
-				}else{
+		function chartAfterJson() {
+			drawChart();
 
-					data[a] = json["rates"][month+"0"+a.toString()][yCountry];
-					if(Number(data[a])>maxY) {
-						maxY=Number(data[a]);
-					}
-					if(Number(data[a])<minY) {
-						minY=Number(data[a]);
-					}
-				}
-			}
-			
-			for(var a=10; a <= 30; a++) {
-				if(json["rates"][month+a.toString()]== undefined){
-					data[a] = undefined;
-				}else{
-					data[a] = json["rates"][month+a.toString()][yCountry];
-					if(Number(data[a])>maxY) {
-						maxY=Number(data[a]);
-					}
-					if(Number(data[a])<minY) {
-						minY=Number(data[a]);
+			function drawChart() {
+				for(var a=1; a <= 9; a++) {
+					if(json["rates"][month+"0"+a.toString()]== undefined){
+						data[a] = undefined;
+					}else{
+
+						data[a] = json["rates"][month+"0"+a.toString()][yCountry];
+						if(Number(data[a])>maxY) {
+							maxY=Number(data[a]);
+						}
+						if(Number(data[a])<minY) {
+							minY=Number(data[a]);
+						}
 					}
 				}
-			}
-			// maxY = Math.ceil(maxY);
-
-			context.fillStyle = bgColor;
-			context.fillRect(0, 0, width, height);
-
-			//draw coordinate axis
-			context.lineWidth="3";
-			context.strokeStyle="black";
-			context.beginPath();
-			context.moveTo(100, 25);
-			context.lineTo(100, 375);
-			context.lineTo(750, 375);
-			context.stroke();
-
-			//draw origin
-			context.font = "15px Arial";
-			context.fillStyle = axisColor;
-			context.fillText("0",80,380);
-
-			// var i=1
-			// for(; i<=30; i++) { // draw x coordinate
-			// 	context.fillText(i.toString(),85+20*i,390);
-			// 	context.beginPath();
-			// 	context.moveTo(90+20*i, 375);
-			// 	context.lineTo(90+20*i, 370);
-			// 	context.stroke();
-			// }
-
-			// draw y
-			var precision = 4;
-			if(maxY > 100) {
-				precision = 2;
-			} else if (maxY > 10) {
-				precision = 3;
-			} else {
-				precision = 4;
-			}
-			var unit = (maxY-minY) / 10;
-			for(var j=0; j<=10; j++) { 
-				context.fillText((j*unit+minY).toFixed(precision).toString(),50,360-j*30);
-				context.beginPath();
-				context.moveTo(100, 355-j*30);
-				context.lineTo(105, 355-j*30);
-				context.stroke();
-			}
-
-			//X Y label
-			context.fillText(xCountry,85+20*32,390);
-			context.fillText(yCountry,60,30);
-
-			
-
-			var left = 100;
-			var prev_stat = -1;
-			var move_left_by = 20;
-			
-			diff = maxY - minY;
-			var day = 1;
-			for(var i=1; i<=31; i++) {
-				if(data[i] != undefined) {
-					the_stat = data[i];
-					dataIndex[day] = the_stat;
 				
-					// draw X coordinate
-					context.strokeStyle = axisColor;
-					context.fillText(i.toString(),95+20*day,390);
-					context.beginPath();
-					context.moveTo(100+20*day, 375);
-					context.lineTo(100+20*day, 370);
-					context.stroke();
-
-					// draw data
-					if(prev_stat > 0) {
-						context.strokeStyle = lineColor;
-						
-	 					context.beginPath();
-						context.moveTo(left, 355-(prev_stat-minY)/diff*300);
-						context.lineTo(left+move_left_by, 355-(the_stat-minY)/diff*300);
-						context.lineWidth = 3;
-						context.stroke();
-
-						//draw dot
-						context.beginPath();
-						context.arc(left, 355-(prev_stat-minY)/diff*300, 2, 0, 2 * Math.PI, false);
-						context.strokeStyle = dotColor;
-						context.stroke();
+				for(var a=10; a <= 30; a++) {
+					if(json["rates"][month+a.toString()]== undefined){
+						data[a] = undefined;
+					}else{
+						data[a] = json["rates"][month+a.toString()][yCountry];
+						if(Number(data[a])>maxY) {
+							maxY=Number(data[a]);
+						}
+						if(Number(data[a])<minY) {
+							minY=Number(data[a]);
+						}
 					}
-					prev_stat = the_stat;
-					left += move_left_by;
-					day += 1;
 				}
-			}
-			//draw last dot
-			context.beginPath();
-			context.arc(left, 355-(prev_stat-minY)/diff*300, 2, 0, 2 * Math.PI, false);
-			context.strokeStyle = dotColor;
-			context.stroke();
-			//write the last day rate to showData
-			document.getElementById("showData").textContent = dataIndex[day-1].toFixed(4);
+				// maxY = Math.ceil(maxY);
 
-      }
+				context.fillStyle = bgColor;
+				context.fillRect(0, 0, width, height);
+
+				//draw coordinate axis
+				context.lineWidth="3";
+				context.strokeStyle="black";
+				context.beginPath();
+				context.moveTo(100, 25);
+				context.lineTo(100, 375);
+				context.lineTo(750, 375);
+				context.stroke();
+
+				//draw origin
+				context.font = "15px Arial";
+				context.fillStyle = axisColor;
+				context.fillText("0",80,380);
+
+				// var i=1
+				// for(; i<=30; i++) { // draw x coordinate
+				// 	context.fillText(i.toString(),85+20*i,390);
+				// 	context.beginPath();
+				// 	context.moveTo(90+20*i, 375);
+				// 	context.lineTo(90+20*i, 370);
+				// 	context.stroke();
+				// }
+
+				// draw y
+				var precision = 4;
+				if(maxY > 100) {
+					precision = 2;
+				} else if (maxY > 10) {
+					precision = 3;
+				} else {
+					precision = 4;
+				}
+				var unit = (maxY-minY) / 10;
+				for(var j=0; j<=10; j++) { 
+					context.fillText((j*unit+minY).toFixed(precision).toString(),50,360-j*30);
+					context.beginPath();
+					context.moveTo(100, 355-j*30);
+					context.lineTo(105, 355-j*30);
+					context.stroke();
+				}
+
+				//X Y label
+				context.fillText(xCountry,85+20*32,390);
+				context.fillText(yCountry,60,30);
+
+				
+
+				var left = 100;
+				var prev_stat = -1;
+				var move_left_by = 20;
+				
+				diff = maxY - minY;
+				var day = 1;
+				for(var i=1; i<=31; i++) {
+					if(data[i] != undefined) {
+						the_stat = data[i];
+						dataIndex[day] = the_stat;
+					
+						// draw X coordinate
+						context.strokeStyle = axisColor;
+						context.fillText(i.toString(),95+20*day,390);
+						context.beginPath();
+						context.moveTo(100+20*day, 375);
+						context.lineTo(100+20*day, 370);
+						context.stroke();
+
+						// draw data
+						if(prev_stat > 0) {
+							context.strokeStyle = lineColor;
+							
+		 					context.beginPath();
+							context.moveTo(left, 355-(prev_stat-minY)/diff*300);
+							context.lineTo(left+move_left_by, 355-(the_stat-minY)/diff*300);
+							context.lineWidth = 3;
+							context.stroke();
+
+							//draw dot
+							context.beginPath();
+							context.arc(left, 355-(prev_stat-minY)/diff*300, 2, 0, 2 * Math.PI, false);
+							context.strokeStyle = dotColor;
+							context.stroke();
+						}
+						prev_stat = the_stat;
+						left += move_left_by;
+						day += 1;
+					}
+				}
+				//draw last dot
+				context.beginPath();
+				context.arc(left, 355-(prev_stat-minY)/diff*300, 2, 0, 2 * Math.PI, false);
+				context.strokeStyle = dotColor;
+				context.stroke();
+				//write the last day rate to showData
+				document.getElementById("showData").textContent = dataIndex[day-1].toFixed(4);
+
+	      }
 
 
 
-      function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
-        };
-      }
-     
-      var prev_whichPoint = -1;
-      canvas.addEventListener('mousemove', function(evt) {
-        var mousePos = getMousePos(canvas, evt);
-        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-        var whichPoint = Math.round((mousePos.x-120) / 20) + 1;
-        if(prev_whichPoint!=whichPoint && dataIndex[whichPoint] != undefined) {
-        	if(dataIndex[whichPoint] != undefined) {
-        		document.getElementById("showData").textContent = dataIndex[whichPoint].toFixed(4);
-        	}
-	        drawChart();
+	      function getMousePos(canvas, evt) {
+	        var rect = canvas.getBoundingClientRect();
+	        return {
+	          x: evt.clientX - rect.left,
+	          y: evt.clientY - rect.top
+	        };
+	      }
+	     
+	      var prev_whichPoint = -1;
+	      canvas.addEventListener('mousemove', function(evt) {
+	        var mousePos = getMousePos(canvas, evt);
+	        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+	        var whichPoint = Math.round((mousePos.x-120) / 20) + 1;
+	        if(prev_whichPoint!=whichPoint && dataIndex[whichPoint] != undefined) {
+	        	if(dataIndex[whichPoint] != undefined) {
+	        		document.getElementById("showData").textContent = dataIndex[whichPoint].toFixed(4);
+	        	}
+		        drawChart();
 
-	        //draw highlight
-	        context.beginPath();
-			context.arc(whichPoint*20+100, 355-(dataIndex[whichPoint]-minY)/diff*300, 3, 0, 2 * Math.PI, false);
-			context.strokeStyle = highlightColor;
-			context.stroke();
-	        //console.log(whichPoint + ": " +(whichPoint*20+80) + ", " +(355-(dataIndex[whichPoint]-minY)/diff*300));
-	        prev_whichPoint = whichPoint;
-    	}
-      }, false);
-  }
+		        //draw highlight
+		        context.beginPath();
+				context.arc(whichPoint*20+100, 355-(dataIndex[whichPoint]-minY)/diff*300, 3, 0, 2 * Math.PI, false);
+				context.strokeStyle = highlightColor;
+				context.stroke();
+		        //console.log(whichPoint + ": " +(whichPoint*20+80) + ", " +(355-(dataIndex[whichPoint]-minY)/diff*300));
+		        prev_whichPoint = whichPoint;
+	    	}
+	      }, false);
+	  }
 } // drawChartOKclicked bracket
      function chartOK() {
      	var country1 = $('#selectCountry1').text();
