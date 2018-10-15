@@ -47,10 +47,10 @@
     padding-top: 15px;
     padding-bottom: 15px;
 }
-#maintable {
-    background-color: #ffffe0;
+/* #maintable {
+    background-color: #FFFEF6;
     table-layout: fixed;
-}
+} */
 
 #maintable td{
     text-align: center;
@@ -63,7 +63,7 @@
 }
 
 #maintable  td:hover {
-    background-color: #eab49e;
+    background-color: #ffc107;
 }   
 .hoverButton {
     display: none;
@@ -80,9 +80,6 @@ td:hover .hoverButton {
 
 #selectMonth, #selectYear{
      width: 100px;
-}
-.selectCountryDiv {
-    display: inline-block;
 }
 .selectCountryDiv {
     display: inline-block;

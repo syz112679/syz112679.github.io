@@ -241,23 +241,55 @@ function countryClick(input) {
     document.getElementById("selectCountry").innerHTML = '<img height="25" width="25" src="css/flags/' + input + '.svg">' + input;
 }
 
-function dropdownFunc() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
+function changeOrientation() {
+	var tmp = rowCurrencies;
+	rowCurrencies = colCurrencies;
+	colCurrencies = tmp;
 
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
+	tmp = rowToIndex;
+	rowToIndex = colToIndex;
+	colToIndex = tmp;
 
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
+	tmp = rows;
+	rows = cols;
+	cols = tmp;
+
+	// row head line
+	tableHTML.innerHTML = "<tr>";
+	for(var i = 0; i < cols; i++) {
+		tableHTML.innerHTML += "<td>" + colCurrencies[i] + "</td>";
+	}
+	tableHTML.innerHTML += "</tr>";
+
+	for(var i = 1; i <= rows; i++) 
+	{
+		tableHTML.innerHTML += "<tr>";
+		for (var k = 0; k < cols; k++) {
+			if(rowRates[rowCurrencies[k]] == undefined){
+				if(localStorage[rowCurrencies[k]] == undefined) {
+					var url = prefix + rowCurrencies[k];
+			    	fetch(url, {
+				        method: 'get'
+				    })
+				    .then(response => response.json())
+				    .then(jsonData => {
+				    	var baseCurrency = jsonData.base;
+				    	rowRates[baseCurrency] = jsonData;
+				    	localStorage[baseCurrency] = JSON.stringify(jsonData);
+						for (var k = 0; k < cols; k++) {
+							tableHTML.children[rowToIndex[baseCurrency]].children[colToIndex[colCurrencies[k]]].textContent = (jsonData.rates[colCurrencies[k]] * amount).toFixed(2).toString();
+						}
+				    })
+				    .catch(error => console.error(error));
+				} else {
+					rowRates[rowCurrencies[k]] = JSON.parse(localStorage[rowCurrencies[k]]);	
+				}
+				
+			} 
+			tableChildren[k+1].innerHTML += '<td>' + (rowRates[rowCurrencies[k]].rates[colCurrencies[i]] * amount).toFixed(2).toString() +'</td>';
+		}
+
+	}
 }
 
 function interChangeCountry() {
@@ -305,7 +337,7 @@ function deleteCol(input) {
 	cols -= 1;
 }
 //************************************ Chart ***************************************
-		var json;
+		var json, day=1;
 		var canvas = document.getElementById('canvas'),
 			context = canvas.getContext('2d'),
 			width = canvas.width = 800,
@@ -313,7 +345,8 @@ function deleteCol(input) {
 		var data = {}; // 1 2 3 4 5, 8 9 10...
 		var dataIndex = {}; // 1 2 3 4 5 6 7 8 9 ...
 		var maxY=0 ,minY=999999, diff=0;
-		var bgColor = "#ffffe0", lineColor = "#082567", dotColor="#b8a1cf", highlightColor="#ff8033", axisColor = "#000000" ;
+		var hasListener = false;
+		var bgColor = "#f5f5fa", lineColor = "#082567", dotColor="#b8a1cf", highlightColor="#ffc107", axisColor = "#000000" ;
 	
 	function drawChartOKclicked(xCountry, yCountry, year, month) {
 		
@@ -321,8 +354,7 @@ function deleteCol(input) {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var nextMonth = year + "-" + (Number(month)+1) + "-";
 		var month = year + "-" + month + "-";
-		
-		
+	
 		//https://api.exchangeratesapi.io/history?start_at=2018-08-01&end_at=2018-09-01&symbols=ILS&base=USD
 		json = {"end_at":"2018-09-01","start_at":"2018-08-01","rates":{"2018-08-21":{"JPY":127.01,"CNY":7.8748},"2018-08-06":{"JPY":128.68,"CNY":7.9066},"2018-08-02":{"JPY":129.43,"CNY":7.9518},"2018-08-14":{"JPY":126.42,"CNY":7.8488},"2018-08-30":{"JPY":130.32,"CNY":7.9887},"2018-08-07":{"JPY":128.88,"CNY":7.9171},"2018-08-24":{"JPY":128.97,"CNY":7.9326},"2018-08-16":{"JPY":126.02,"CNY":7.8396},"2018-08-23":{"JPY":128.31,"CNY":7.9643},"2018-08-15":{"JPY":125.67,"CNY":7.8298},"2018-08-01":{"JPY":130.81,"CNY":7.9519},"2018-08-13":{"JPY":126.11,"CNY":7.8537},"2018-08-22":{"JPY":128.08,"CNY":7.947},"2018-08-03":{"JPY":129.3,"CNY":7.9195},"2018-08-27":{"JPY":129.16,"CNY":7.9396},"2018-08-29":{"JPY":129.73,"CNY":7.9626},"2018-08-20":{"JPY":126.25,"CNY":7.8351},"2018-08-17":{"JPY":125.75,"CNY":7.842},"2018-08-08":{"JPY":128.72,"CNY":7.9231},"2018-08-09":{"JPY":128.84,"CNY":7.9053},"2018-08-10":{"JPY":127.07,"CNY":7.8468},"2018-08-31":{"JPY":129.05,"CNY":7.9664},"2018-08-28":{"JPY":130.03,"CNY":7.9641}},"base":"EUR"}
 		
@@ -422,7 +454,8 @@ function deleteCol(input) {
 				}
 
 				//X Y label
-				context.fillText(xCountry,85+20*32,390);
+				context.fillText(xCountry,85+20*30,390);
+				context.fillText("/day",85+20*32,390);
 				context.fillText(yCountry,60,30);
 
 				
@@ -432,7 +465,7 @@ function deleteCol(input) {
 				var move_left_by = 20;
 				
 				diff = maxY - minY;
-				var day = 1;
+				day = 1;
 				for(var i=1; i<=31; i++) {
 					if(data[i] != undefined) {
 						the_stat = data[i];
@@ -473,13 +506,13 @@ function deleteCol(input) {
 				context.strokeStyle = dotColor;
 				context.stroke();
 				//write the last day rate to showData
-				document.getElementById("showData").textContent = dataIndex[day-1].toFixed(4);
+				if(dataIndex[day-2]!=undefined)
+					document.getElementById("showData").textContent = dataIndex[day-2].toFixed(4);
 
 	      }
 
 
-
-	      function getMousePos(canvas, evt) {
+		  function getMousePos(canvas, evt) {
 	        var rect = canvas.getBoundingClientRect();
 	        return {
 	          x: evt.clientX - rect.left,
@@ -487,17 +520,19 @@ function deleteCol(input) {
 	        };
 	      }
 	     
-	      var prev_whichPoint = -1;
-	      canvas.addEventListener('mousemove', function(evt) {
+		  var prev_whichPoint = -1;
+		  function canvasListener(evt) {
 	        var mousePos = getMousePos(canvas, evt);
 	        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 	        var whichPoint = Math.round((mousePos.x-120) / 20) + 1;
 	        if(prev_whichPoint!=whichPoint && dataIndex[whichPoint] != undefined) {
-	        	if(dataIndex[whichPoint] != undefined) {
-	        		document.getElementById("showData").textContent = dataIndex[whichPoint].toFixed(4);
-	        	}
+	        	
 		        drawChart();
-
+				if(dataIndex[whichPoint] != undefined) {
+					document.getElementById("showData").textContent = dataIndex[whichPoint].toFixed(4);
+					console.log(dataIndex[whichPoint].toFixed(4));
+					console.log(document.getElementById("showData").textContent);
+	        	}
 		        //draw highlight
 		        context.beginPath();
 				context.arc(whichPoint*20+100, 355-(dataIndex[whichPoint]-minY)/diff*300, 3, 0, 2 * Math.PI, false);
@@ -506,7 +541,14 @@ function deleteCol(input) {
 		        //console.log(whichPoint + ": " +(whichPoint*20+80) + ", " +(355-(dataIndex[whichPoint]-minY)/diff*300));
 		        prev_whichPoint = whichPoint;
 	    	}
-	      }, false);
+	      }
+		if(hasListener) {
+			canvas.removeEventListener('mousemove', canvasListener, false);
+			hasListener = false;
+		}
+	      
+		  canvas.addEventListener('mousemove', canvasListener, false);
+		  hasListener = true;
 	  }
 } // drawChartOKclicked bracket
      function chartOK() {
